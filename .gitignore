@@ -1,2 +1,8 @@
 Code_Cards_Server/secret.py
 .vscode/settings.json
+Code_Cards_Server/secret.py
+.vscode/settings.json
+*.pyc
+*/migrations
+db.sqlite3
+*/_pycache_

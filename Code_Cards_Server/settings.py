@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-from Code_Cards_Server.secret import *
+from .secret import *
 SECRET_KEY = SECRET_KEY_IMPORT
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'codeapp',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders'
 ]
+
+AUTH_USER_MODEL='codeapp.Account'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
