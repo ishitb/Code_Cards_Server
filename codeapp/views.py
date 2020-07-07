@@ -25,7 +25,7 @@ def registration_view(request):
             return Response({'data': serializer.errors}, status=status.HTTP_409_CONFLICT)
         return Response(data, status=status.HTTP_201_CREATED)
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes((AllowAny,))
 def Login(request):
     email = request.data.get("email")
