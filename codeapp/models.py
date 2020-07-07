@@ -68,3 +68,20 @@ class Account(AbstractBaseUser):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+class OAuthAccount(models.Model):
+    email = models.EmailField(max_length = 60,verbose_name = "email",null=False,blank=False)
+    username = models.CharField(max_length = 30,null=False,blank=False)
+    avatar = models.CharField(max_length = 20,null=True)
+    date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
+    oauthType = models.CharField(max_length = 20,null=False,blank=False)
+    token = models.CharField(max_length = 50,null=False,blank=False)
+    is_admin = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.email
+    def getToken(self):
+        return self.token
+    def getUsername(self):
+        return self.username

@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'codeapp',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
+    'corsheaders'
 ]
 
 AUTH_USER_MODEL='codeapp.Account'
