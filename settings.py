@@ -32,16 +32,16 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'codeapp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'codeapp',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
+    'corsheaders'
 ]
 
 AUTH_USER_MODEL='codeapp.Account'
@@ -125,13 +125,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# AUTOMATED EMAIL
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-EMAIL_USE_SSL = True
-EMAIL_PORT = 465
-EMAIL_HOST_USER = GMAIL_EMAIL
-EMAIL_HOST_PASSWORD = GMAIL_PASS

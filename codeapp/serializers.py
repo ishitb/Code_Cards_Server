@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Account
+from .models import Account, OAuthAccount
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -29,3 +29,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account.set_password(password)
         account.save()
         return account
+
+
+class OAuthAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OAuthAccount
+        fields = ['id','email', 'username', 'avatar',
+                  'date_joined', 'oauthType', 'token', 'is_admin']
