@@ -7,3 +7,4 @@ Code_Cards_Server/secret.py
 db.sqlite3
 */_pycache_
 codeapp/secret.py
+*.png

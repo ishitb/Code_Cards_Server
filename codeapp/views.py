@@ -1,16 +1,18 @@
 from django.shortcuts import render
-from rest_framework import status, generics
+from rest_framework import status, generics, viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
-from .serializers import RegistrationSerializer, OAuthAccountSerializer, RequestResetPasswordSerializer
+from .serializers import RegistrationSerializer, OAuthAccountSerializer, RequestResetPasswordSerializer, ContactUsSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate
-from .models import Account, OAuthAccount
+from .models import Account, OAuthAccount, ContactUsModel
 from django.http import HttpResponse, JsonResponse
+from .utils.mails import send
+from .secret import *
 
-
-class TestFunction(generics.GenericAPIView) :
+# PASSWORD RESET VIEW
+class RequestResetPasswordView(generics.GenericAPIView) :
     serializer_class = RequestResetPasswordSerializer
 
     def post(self, request) :
@@ -47,7 +49,7 @@ def registration_view(request):
             return Response({'error_message': error_message}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_201_CREATED)
 
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes((AllowAny,))
 def Login(request):
     email = request.data.get("email")
@@ -106,57 +108,20 @@ def OAuthLogin_detail(request, pk):
         oauth_login.delete()
         return Response(status=status.HTTP_204_NO_CONNECT)
 
+# class ContactUsViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin) :
+#     serializer_class = ContactUsSerializer
+#     queryset = ContactUsModel.objects.all()
 
-# CUSTOM PASSWORD RESET VIEW
+class ContactUsViewSet(viewsets.ViewSet) :
+    def create(self, request) :
+        serializer = ContactUsSerializer(data = request.data)
 
-from django.urls import reverse_lazy
-from django.contrib.auth.tokens import default_token_generator
-from .forms.Password_Reset_Form import PasswordResetForm
-from django.utils.translation import gettext_lazy as _
-from django.views.generic.edit import FormView
-from django.views.decorators.csrf import csrf_protect
-from django.utils.decorators import method_decorator
+        if serializer.is_valid() :
+            serializer.save()
 
-class PasswordContextMixin:
-    extra_context = None
+            send("CodeCards Support Response", f"Hello {serializer.data['name']}.\nThank you for contacting us with your issue. We will try to respond to you as soon as possible and take your suggestions and comments into consideration.\nThank you for using CodeCrds.", to=[serializer.data['email']])
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'title': self.title,
-            **(self.extra_context or {})
-        })
-        return context
-
-class PasswordResetView(PasswordContextMixin, FormView):
-    email_template_name = 'registration/password_reset_email.html'
-    extra_email_context = None
-    form_class = PasswordResetForm
-    from_email = None
-    html_email_template_name = None
-    subject_template_name = 'registration/password_reset_subject.txt'
-    success_url = reverse_lazy('password_reset_done')
-    template_name = 'registration/password_reset_form.html'
-    title = _('Password reset')
-    token_generator = default_token_generator
-
-    def list(self) :
-        print(self.custom_text)
-
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
-    def form_valid(self, form):
-        opts = {
-            'use_https': self.request.is_secure(),
-            'token_generator': self.token_generator,
-            'from_email': self.from_email,
-            'email_template_name': self.email_template_name,
-            'subject_template_name': self.subject_template_name,
-            'request': self.request,
-            'html_email_template_name': self.html_email_template_name,
-            'extra_email_context': self.extra_email_context,
-        }
-        form.save(**opts)
-        return super().form_valid(form)
+            return Response(serializer.data, status = status.HTTP_200_OK)
+        
+        else :
+            return Response({'error_message': "There was some problem with the server. Please try again later!"}, status = status.HTTP_400_BAD_REQUEST)

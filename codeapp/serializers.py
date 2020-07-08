@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Account, OAuthAccount
+from .models import *
 
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
@@ -43,6 +43,12 @@ class OAuthAccountSerializer(serializers.ModelSerializer):
         fields = ['id','email', 'username', 'avatar',
                   'date_joined', 'oauthType', 'token', 'is_admin']
 
+class ContactUsSerializer(serializers.ModelSerializer) :
+    class Meta :
+        model = ContactUsModel
+        fields = ['name', 'email', 'screenshot', 'details', 'id']
+
+# PASSWORD RESET SERIALIZER
 class RequestResetPasswordSerializer(serializers.Serializer) :
 
     email = serializers.EmailField(min_length=2)

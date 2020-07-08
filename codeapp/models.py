@@ -85,3 +85,25 @@ class OAuthAccount(models.Model):
         return self.token
     def getUsername(self):
         return self.username
+
+# TO SET CUSTOM FILE UPLOAD NAME
+def path_and_rename(instance, filename) :
+        if filename.startswith("Contact-Us-") :
+            pass
+        else :
+            filename = "contact_us_screenshots/" + filename
+
+        upload_to = filename
+        return upload_to
+
+class ContactUsModel(models.Model) :
+    name = models.CharField(max_length = 50)
+    email = models.EmailField(max_length = 60)
+    details = models.TextField()
+    screenshot = models.ImageField(null = True, blank = True, upload_to=path_and_rename)
+    screenshot_url = models.CharField(max_length=600, blank=True, default="")
+    date_posted = models.DateTimeField(auto_now = True)
+    responded = models.BooleanField(default = False)
+
+    def __str__(self) :
+        return str(self.email)

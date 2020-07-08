@@ -135,3 +135,8 @@ EMAIL_USE_SSL = True
 EMAIL_PORT = 465
 EMAIL_HOST_USER = GMAIL_EMAIL
 EMAIL_HOST_PASSWORD = GMAIL_PASS
+
+# FOR IMAGES
+MEDIA_ROOT = os.path.join(BASE_DIR, 'codeapp/media/contact_us_screenshots')
+CONTACT_US_MEDIA_URL = '/media/contact_us_screenshots/'
+MEDIA_URL = '/media/'
