@@ -6,3 +6,4 @@ Code_Cards_Server/secret.py
 */migrations
 db.sqlite3
 */_pycache_
+codeapp/secret.py

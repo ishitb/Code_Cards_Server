@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail
+from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, TestFunction
 from rest_framework.authtoken.views import obtain_auth_token
 
 app_name = 'codeapp'
@@ -18,4 +18,5 @@ urlpatterns = [
 	path('login', Login, name='login'),
 	path('oauthLogin', OAuthLogin, name='oauthLogin'),
 	path('oauthLoginDetail/<int:pk>/', OAuthLogin_detail, name='oauthLoginDetail'),
+	path('test/', TestFunction.as_view())
 ] + auth_view_urls
