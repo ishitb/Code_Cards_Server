@@ -121,6 +121,12 @@ class ContactUsViewSet(viewsets.ViewSet) :
 
             send("CodeCards Support Response", f"Hello {serializer.data['name']}.\nThank you for contacting us with your issue. We will try to respond to you as soon as possible and take your suggestions and comments into consideration.\nThank you for using CodeCrds.", to=[serializer.data['email']])
 
+            query = ContactUsModel.objects.filter(pk = serializer.data['id'])
+            query_screenshot_url = query[0].add_screenshot_url(request)
+            query.update(screenshot_url = query_screenshot_url)
+
+            send("New Support Query!", f"Name: {serializer.data['name']}\nEmail Address: {serializer.data['email']}\nDetails: {serializer.data['details']}\nOptional Screenshot: {query_screenshot_url}", to=[GMAIL_EMAIL])
+
             return Response(serializer.data, status = status.HTTP_200_OK)
         
         else :

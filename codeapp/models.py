@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
+from django.contrib.sites.shortcuts import get_current_site
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -101,9 +102,16 @@ class ContactUsModel(models.Model) :
     email = models.EmailField(max_length = 60)
     details = models.TextField()
     screenshot = models.ImageField(null = True, blank = True, upload_to=path_and_rename)
-    screenshot_url = models.CharField(max_length=600, blank=True, default="")
+    screenshot_url = models.CharField(max_length=600, blank=True)
     date_posted = models.DateTimeField(auto_now = True)
     responded = models.BooleanField(default = False)
 
     def __str__(self) :
         return str(self.email)
+
+    def add_screenshot_url(self, request) :
+        if len(self.screenshot) > 0 :
+            screenshot_url = str(get_current_site(request)) + '/media/' + str(self.screenshot)
+        else :
+            screenshot_url = "No Screenshot Given!"
+        return screenshot_url
