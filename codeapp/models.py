@@ -110,7 +110,7 @@ class ContactUsModel(models.Model) :
         return str(self.email)
 
     def add_screenshot_url(self, request) :
-        if len(self.screenshot) > 0 :
+        if str(self.screenshot) is not "" :
             screenshot_url = str(get_current_site(request)) + '/media/' + str(self.screenshot)
         else :
             screenshot_url = "No Screenshot Given!"

@@ -127,7 +127,7 @@ class ContactUsViewSet(viewsets.ViewSet) :
 
             send("New Support Query!", f"Name: {serializer.data['name']}\nEmail Address: {serializer.data['email']}\nDetails: {serializer.data['details']}\nOptional Screenshot: {query_screenshot_url}", to=[GMAIL_EMAIL])
 
-            return Response(serializer.data, status = status.HTTP_200_OK)
+            return Response({'message': "Query sent! Our support team will respond to you soon."}, status = status.HTTP_200_OK)
         
         else :
-            return Response({'error_message': "There was some problem with the server. Please try again later!"}, status = status.HTTP_400_BAD_REQUEST)
+            return Response({'message': "There was some problem with the server. Please try again later!"}, status = status.HTTP_400_BAD_REQUEST)
