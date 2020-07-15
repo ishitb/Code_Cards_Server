@@ -16,7 +16,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['email', 'username', 'password', 'password2']
+        fields = ['email', 'username', 'password', 'password2', 'avatar']
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -26,16 +26,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account = Account(
             email=self.validated_data['email'],
             username=self.validated_data['username'],
+            avatar = self.validated_data['avatar']
         )
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
         if password != password2:
             raise serializers.ValidationError(
-                {'password': 'Passwords must match.'})
+                {'error_message': 'Passwords must match.'})
         account.set_password(password)
         account.save()
         return account
-
 
 class OAuthAccountSerializer(serializers.ModelSerializer):
     class Meta:

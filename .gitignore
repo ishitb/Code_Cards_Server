@@ -5,6 +5,6 @@ Code_Cards_Server/secret.py
 *.pyc
 */migrations
 db.sqlite3
-*/_pycache_
+*/_pycache_/*
 codeapp/secret.py
 codeapp/media/*

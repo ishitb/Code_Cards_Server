@@ -32,6 +32,7 @@ def registration_view(request):
             data['response'] = 'successfully registered new user.'
             data['email'] = account.email
             data['username'] = account.username
+            data['avatar'] = account.avatar
             token = Token.objects.get(user=account).key
             data['token'] = token
         else:
@@ -44,8 +45,8 @@ def registration_view(request):
                 username_error = serializer.errors['username'][0]
             except :
                 username_error = None
-
-            error_message = email_error if email_error is not None else "" + username_error if username_error is not None else ""
+                
+            error_message = email_error if email_error is not None else "" + username_error if username_error is not None else "Internal Server Error"
             return Response({'error_message': error_message}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_201_CREATED)
 
@@ -69,6 +70,37 @@ def Login(request):
         'token': token.key
     }, status=status.HTTP_202_ACCEPTED)
 
+@api_view(['PUT'])
+@permission_classes((AllowAny, ))
+def Update_Account(request) :
+
+    try :
+        account = Token.objects.get(key = request.data.get('token')).user
+    except :
+        return Response({'error_message': "Account doesn't exist. Please try again!"}, status = status.HTTP_401_UNAUTHORIZED)
+    
+    if 'username' in request.data.keys() :
+        newUsername = request.data.get('username')
+        
+        # EDGE CASES
+        if account.username == newUsername :
+            return Response({'error_message': "Please choose a new username!"}, status = status.HTTP_400_BAD_REQUEST)
+
+        try :
+            Account.objects.get(username = newUsername)
+            return Response({'error_message': "This username already exists. Please choose a unique username!"}, status = status.HTTP_400_BAD_REQUEST)
+        except :
+            account.username = newUsername
+    
+    elif 'avatar' in request.data.keys() :
+        account.avatar = request.data.get('avatar')
+
+    else :
+        return Response({'error_message': "Please provide at least one field to update"}, status = status.HTTP_400_BAD_REQUEST)
+
+    account.save()
+
+    return Response({'message': "Account updated successfully"}, status = status.HTTP_202_ACCEPTED)
 
 @api_view(['POST', 'GET', ])
 def OAuthLogin(request):

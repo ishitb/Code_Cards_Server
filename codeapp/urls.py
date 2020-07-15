@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, RequestResetPasswordView, ContactUsViewSet
+from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, RequestResetPasswordView, ContactUsViewSet, Update_Account
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -21,6 +21,7 @@ auth_view_urls = [
 urlpatterns = [
 	path('register', registration_view, name='register'),
 	path('login', Login, name='login'),
+	path('update-account/', Update_Account, name="Update Account"),
 	path('oauthLogin', OAuthLogin, name='oauthLogin'),
 	path('oauthLoginDetail/<int:pk>/', OAuthLogin_detail, name='oauthLoginDetail'),
 ] + auth_view_urls + router.urls

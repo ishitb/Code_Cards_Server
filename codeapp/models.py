@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 from rest_framework.authtoken.models import Token
 
-from django.contrib.sites.shortcuts import get_current_site
+import uuid
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -39,9 +40,10 @@ class MyAccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser):
+    id = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=True, null=True)
-    avatar = models.CharField(max_length=20, null=True)
+    avatar = models.CharField(max_length=50, null=True)
     date_joined = models.DateTimeField(
         verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
@@ -74,7 +76,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class OAuthAccount(models.Model):
     email = models.EmailField(max_length = 60,verbose_name = "email",null=False,blank=False)
     username = models.CharField(max_length = 30,null=False,blank=False)
-    avatar = models.CharField(max_length = 20,null=True)
+    avatar = models.CharField(max_length = 50,null=True)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     oauthType = models.CharField(max_length = 20,null=False,blank=False)
     token = models.CharField(max_length = 50,null=False,blank=False)
