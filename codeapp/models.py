@@ -112,8 +112,30 @@ class ContactUsModel(models.Model) :
         return str(self.email)
 
     def add_screenshot_url(self, request) :
-        if str(self.screenshot) is not "" :
+        if str(self.screenshot) != "" :
             screenshot_url = str(get_current_site(request)) + '/media/' + str(self.screenshot)
         else :
             screenshot_url = "No Screenshot Given!"
         return screenshot_url
+
+# cards
+class Cards(models.Model):
+    question = models.CharField(max_length = 1000,null=False)
+    hint = models.CharField(max_length = 600,null=False)
+    company = models.CharField(max_length = 50,null=True)
+    tags = models.CharField(max_length = 50,null=True)
+    
+    def __str__(self):
+        return self.question
+    def getHint(self):
+        return self.hint
+
+class CardsSolutions(models.Model):
+    solution = models.CharField(max_length = 3000,null=False)
+    timeComplexity = models.CharField(max_length = 30,null = True)
+    card = models.ForeignKey(Cards,on_delete = models.CASCADE)
+
+    def __str__(self):
+        return self.solution
+    def getTimeComplexity(self):
+        return self.timeComplexity

@@ -3,13 +3,16 @@ from rest_framework import status, generics, viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
-from .serializers import RegistrationSerializer, OAuthAccountSerializer, RequestResetPasswordSerializer, ContactUsSerializer
+from .serializers import RegistrationSerializer, OAuthAccountSerializer, RequestResetPasswordSerializer, ContactUsSerializer, CardsSerializer,CardsSolutionsSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate
-from .models import Account, OAuthAccount, ContactUsModel
+from .models import Account, OAuthAccount, ContactUsModel,Cards,CardsSolutions
 from django.http import HttpResponse, JsonResponse
 from .utils.mails import send
 from .secret import *
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics
 
 # PASSWORD RESET VIEW
 class RequestResetPasswordView(generics.GenericAPIView) :
@@ -163,3 +166,43 @@ class ContactUsViewSet(viewsets.ViewSet) :
         
         else :
             return Response({'message': "There was some problem with the server. Please try again later!"}, status = status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST', 'GET', ])
+def CardsView(request):
+
+    if request.method == 'GET':
+        cards = Cards.objects.all()
+        serializer = CardsSerializer(cards, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = CardsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# class CardsView(viewsets.ViewSet):
+#     queryset = Cards.objects.all()
+#     serializer_class = CardsSerializer
+
+
+class CardsSolutionsView(viewsets.ViewSet):
+    queryset = CardsSolutions.objects.all()
+    serializer_class = CardsSolutionsSerializer
+
+
+class CardsListView(ListAPIView):
+    queryset = Cards.objects.all()
+    serializer_class = CardsSerializer
+    pagination_class = PageNumberPagination
+
+# Problem 
+# class CardsSolutionsListView(generics.ListCreateAPIView):
+#     queryset = CardsSolutions.objects.all()
+#     serializer_class = CardsSolutionsSerializer
+
+# class CardsSolutionsView(generics.RetrieveUpdateDestroyAPIView):
+#     serializer_class = CardsSolutionsSerializer
+#     queryset = CardsSolutions.objects.all()

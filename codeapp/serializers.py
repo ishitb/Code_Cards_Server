@@ -51,6 +51,7 @@ class ContactUsSerializer(serializers.ModelSerializer) :
 # PASSWORD RESET SERIALIZER
 class RequestResetPasswordSerializer(serializers.Serializer) :
 
+
     email = serializers.EmailField(min_length=2)
 
     class Meta :
@@ -82,3 +83,23 @@ class RequestResetPasswordSerializer(serializers.Serializer) :
         self.encrypt()
         self.send_mail(request)
         return self.account
+
+
+class CardsSolutionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CardsSolutions
+        fields = ['solution','timeComplexity']
+
+class CardsSerializer(serializers.ModelSerializer):
+    solutions = CardsSolutionsSerializer(read_only=True, many=True)
+    
+    class Meta:
+        model = Cards
+        fields = ['question','hint','company','tags','solutions']
+
+    # def create(self, validated_data):
+    #     solutions_data = validated_data.pop('solutions')
+    #     cards = Cards.objects.create(**validated_data)
+    #     for solutions_data in solutions_data:
+    #         CardsSolutions.objects.create(question=cards, **solutions_data)
+    #     return cards

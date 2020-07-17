@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, RequestResetPasswordView, ContactUsViewSet, Update_Account
+from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, RequestResetPasswordView, ContactUsViewSet, Update_Account,CardsListView,CardsSolutionsView,CardsView
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -10,6 +10,8 @@ from django.contrib.auth import views as auth_views
 # BY REST_FRAMEWORK
 router = DefaultRouter()
 router.register('contact-us', ContactUsViewSet, basename="Contact Us Queries")
+# router.register('cards',CardsView)
+router.register("cardsSolutions",CardsSolutionsView)
 
 auth_view_urls = [
 	path('reset_password/', RequestResetPasswordView.as_view(), name="reset_password"),
@@ -24,6 +26,9 @@ urlpatterns = [
 	path('update-account/', Update_Account, name="Update Account"),
 	path('oauthLogin', OAuthLogin, name='oauthLogin'),
 	path('oauthLoginDetail/<int:pk>/', OAuthLogin_detail, name='oauthLoginDetail'),
+	path('cards', CardsView, name='cards'),
+	path('cards/list', CardsListView.as_view(), name='cardsList'),
+	#path('cards/solutions', CardsSolutionsView, name='cardsSolutions'),
 ] + auth_view_urls + router.urls
 
 # FOR IMAGES

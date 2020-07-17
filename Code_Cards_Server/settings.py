@@ -46,6 +46,17 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL='codeapp.Account'
 
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 1,
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -133,8 +144,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-EMAIL_HOST_USER = GMAIL_EMAIL
-EMAIL_HOST_PASSWORD = GMAIL_PASS
+EMAIL_HOST_USER = 'codecards.reach@gmail.com'
+EMAIL_HOST_PASSWORD = 'cards@stack'
 
 # FOR IMAGES
 MEDIA_ROOT = os.path.join(BASE_DIR, 'codeapp/media/')
