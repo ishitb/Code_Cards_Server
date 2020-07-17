@@ -8,5 +8,11 @@ class CustomAccountAdmin(admin.ModelAdmin) :
 class CustomContactUsAdmin(admin.ModelAdmin) :
     list_display = ['email', 'name', 'id', 'date_posted', 'responded']
 
+class CustomNotesAdmin(admin.ModelAdmin) :
+    list_display = ['title', 'id', 'user']
+
 admin.site.register(Account, CustomAccountAdmin)
 admin.site.register(ContactUsModel, CustomContactUsAdmin)
+admin.site.register(Cards)
+admin.site.register(CardsSolutions)
+admin.site.register(Notes, CustomNotesAdmin)

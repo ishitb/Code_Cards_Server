@@ -88,14 +88,14 @@ class RequestResetPasswordSerializer(serializers.Serializer) :
 class CardsSolutionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardsSolutions
-        fields = ['solution','timeComplexity']
+        fields = ['solution', 'timeComplexity']
 
 class CardsSerializer(serializers.ModelSerializer):
-    solutions = CardsSolutionsSerializer(read_only=True, many=True)
+    # solutions = CardsSolutionsSerializer(read_only=True, many=True)
     
     class Meta:
         model = Cards
-        fields = ['question','hint','company','tags','solutions']
+        fields = ['question', 'hint', 'company', 'tags']
 
     # def create(self, validated_data):
     #     solutions_data = validated_data.pop('solutions')
@@ -103,3 +103,8 @@ class CardsSerializer(serializers.ModelSerializer):
     #     for solutions_data in solutions_data:
     #         CardsSolutions.objects.create(question=cards, **solutions_data)
     #     return cards
+
+class NoteSerializer(serializers.ModelSerializer) :
+    class Meta :
+        model = Notes
+        fields = '__all__'

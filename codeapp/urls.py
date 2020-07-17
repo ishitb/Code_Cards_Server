@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, RequestResetPasswordView, ContactUsViewSet, Update_Account,CardsListView,CardsSolutionsView,CardsView
+from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, RequestResetPasswordView, ContactUsViewSet, Update_Account, CardsListView, CardsSolutionsView, CardsView, NotesViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -10,8 +10,9 @@ from django.contrib.auth import views as auth_views
 # BY REST_FRAMEWORK
 router = DefaultRouter()
 router.register('contact-us', ContactUsViewSet, basename="Contact Us Queries")
-# router.register('cards',CardsView)
-router.register("cardsSolutions",CardsSolutionsView)
+# router.register('cards/',CardsView)
+router.register('cards-solutions', CardsSolutionsView, basename="Cards Solutions")
+router.register('notes', NotesViewSet, basename="Notes")
 
 auth_view_urls = [
 	path('reset_password/', RequestResetPasswordView.as_view(), name="reset_password"),
@@ -28,7 +29,7 @@ urlpatterns = [
 	path('oauthLoginDetail/<int:pk>/', OAuthLogin_detail, name='oauthLoginDetail'),
 	path('cards', CardsView, name='cards'),
 	path('cards/list', CardsListView.as_view(), name='cardsList'),
-	#path('cards/solutions', CardsSolutionsView, name='cardsSolutions'),
+	# path('cards/solutions', CardsSolutionsView, name='cardsSolutions'),
 ] + auth_view_urls + router.urls
 
 # FOR IMAGES

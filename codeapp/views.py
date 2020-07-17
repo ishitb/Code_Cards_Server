@@ -3,16 +3,18 @@ from rest_framework import status, generics, viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
-from .serializers import RegistrationSerializer, OAuthAccountSerializer, RequestResetPasswordSerializer, ContactUsSerializer, CardsSerializer,CardsSolutionsSerializer
+from .serializers import RegistrationSerializer, OAuthAccountSerializer, RequestResetPasswordSerializer, ContactUsSerializer, CardsSerializer, CardsSolutionsSerializer, NoteSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate
-from .models import Account, OAuthAccount, ContactUsModel,Cards,CardsSolutions
+from .models import Account, OAuthAccount, ContactUsModel, Cards, CardsSolutions, Notes
 from django.http import HttpResponse, JsonResponse
 from .utils.mails import send
 from .secret import *
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
+from django.core.exceptions import ValidationError
 
 # PASSWORD RESET VIEW
 class RequestResetPasswordView(generics.GenericAPIView) :
@@ -184,11 +186,11 @@ def CardsView(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # class CardsView(viewsets.ViewSet):
-#     queryset = Cards.objects.all()
 #     serializer_class = CardsSerializer
+#     queryset = Cards.objects.all()
 
 
-class CardsSolutionsView(viewsets.ViewSet):
+class CardsSolutionsView(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin) :
     queryset = CardsSolutions.objects.all()
     serializer_class = CardsSolutionsSerializer
 
@@ -206,3 +208,63 @@ class CardsListView(ListAPIView):
 # class CardsSolutionsView(generics.RetrieveUpdateDestroyAPIView):
 #     serializer_class = CardsSolutionsSerializer
 #     queryset = CardsSolutions.objects.all()
+
+class NotesViewSet(viewsets.ViewSet) :
+
+    def get_serializer_errors(self, errors) :
+        try :
+            user_error = errors['user'][0]
+            user_error = "User doesn't exist!"
+        except :
+            user_error = None
+        
+        try :
+            title_error = errors['title'][0]
+        except :
+            title_error = None
+
+        try :
+            description_error = errors['description'][0]
+        except :
+            description_error = None
+            
+        error_message = user_error if user_error is not None else "" + title_error if title_error is not None else "" + description_error if description_error is not None else "" "Internal Server Error"    
+        
+        return error_message
+
+    def create(self, request) :
+        serializer = NoteSerializer(data = request.data)
+        if serializer.is_valid() :
+            serializer.save()
+            
+            return Response({'message': "Notes succesfully saved!"}, status = status.HTTP_201_CREATED)
+        
+        else :
+            return Response({'error_message': self.get_serializer_errors(serializer.errors)}, status = status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request) :
+        note = Notes.objects.filter(user = request.data.get('user')) if request.data.get('user') is not None else Notes.objects.all()
+        serializer = NoteSerializer(note, many=True)
+
+        return Response(serializer.data)
+
+    def delete(self, request) :
+        queryset = Notes.objects.all()
+        note = get_object_or_404(queryset, pk = request.data.get('id'))
+
+        note.delete()
+        return Response({'message': "Note Successfully deleted!"}, status = status.HTTP_200_OK)
+
+    def put(self, request) :
+        queryset = Notes.objects.all()
+        note = get_object_or_404(queryset, pk = request.data.get('id'))
+
+        note.title = request.data.get('title') if request.data.get('title') is not None else note.title
+        note.description = request.data.get('description') if request.data.get('description') is not None else note.description
+
+        try :
+            note.save()
+            return Response({'message': "Note successfully updated!"}, status = status.HTTP_201_CREATED)
+        
+        except :
+            return Response({'error_message': "Internal Server Error. Please try again later."}, status = status.HTTP_400_BAD_REQUEST)

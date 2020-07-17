@@ -131,7 +131,8 @@ class Cards(models.Model):
         return self.hint
 
 class CardsSolutions(models.Model):
-    solution = models.CharField(max_length = 3000,null=False)
+    # solution = models.CharField(max_length = 3000,null=False)
+    solution = models.TextField()
     timeComplexity = models.CharField(max_length = 30,null = True)
     card = models.ForeignKey(Cards,on_delete = models.CASCADE)
 
@@ -139,3 +140,11 @@ class CardsSolutions(models.Model):
         return self.solution
     def getTimeComplexity(self):
         return self.timeComplexity
+
+class Notes(models.Model) :
+    title = models.CharField(max_length = 50)
+    description = models.TextField()
+    user = models.ForeignKey(Account, on_delete = models.CASCADE)
+
+    def __str__(self):
+        return str(self.title)
