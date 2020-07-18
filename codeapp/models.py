@@ -120,13 +120,14 @@ class ContactUsModel(models.Model) :
 
 # cards
 class Cards(models.Model):
-    question = models.CharField(max_length = 1000,null=False)
-    hint = models.CharField(max_length = 600,null=False)
+    question = models.TextField()
+    hint = models.CharField(max_length = 600)
     company = models.CharField(max_length = 50,null=True)
     tags = models.CharField(max_length = 50,null=True)
+    solution_link = models.CharField(max_length = 100, null = True)
     
     def __str__(self):
-        return self.question
+        return "Question-" + str(self.id)
     def getHint(self):
         return self.hint
 
