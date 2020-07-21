@@ -95,7 +95,7 @@ class CardsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Cards
-        fields = ['question', 'hint', 'company', 'tags']
+        fields = ['id','question', 'hint', 'company', 'tags']
 
     # def create(self, validated_data):
     #     solutions_data = validated_data.pop('solutions')
@@ -107,4 +107,9 @@ class CardsSerializer(serializers.ModelSerializer):
 class NoteSerializer(serializers.ModelSerializer) :
     class Meta :
         model = Notes
+        fields = '__all__'
+
+class BookmarkSerializer(serializers.ModelSerializer) :
+    class Meta :
+        model = Bookmarks
         fields = '__all__'

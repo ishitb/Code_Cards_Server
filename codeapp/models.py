@@ -149,3 +149,10 @@ class Notes(models.Model) :
 
     def __str__(self):
         return str(self.title)
+
+class Bookmarks(models.Model):
+    bookmark = models.ForeignKey(Cards,on_delete=models.CASCADE)
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.bookmark)

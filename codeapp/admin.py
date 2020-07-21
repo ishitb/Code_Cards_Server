@@ -11,8 +11,12 @@ class CustomContactUsAdmin(admin.ModelAdmin) :
 class CustomNotesAdmin(admin.ModelAdmin) :
     list_display = ['title', 'id', 'user']
 
+class CustomBookmaksAdmin(admin.ModelAdmin):
+    list_display = ['bookmark','user']
+
 admin.site.register(Account, CustomAccountAdmin)
 admin.site.register(ContactUsModel, CustomContactUsAdmin)
 admin.site.register(Cards)
 admin.site.register(CardsSolutions)
 admin.site.register(Notes, CustomNotesAdmin)
+admin.site.register(Bookmarks, CustomBookmaksAdmin)

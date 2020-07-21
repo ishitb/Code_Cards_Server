@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, RequestResetPasswordView, ContactUsViewSet, Update_Account, CardsListView, CardsSolutionsView, CardsView, NotesViewSet
+from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, RequestResetPasswordView, ContactUsViewSet, Update_Account, CardsListView, CardsSolutionsView, CardsView, NotesViewSet, BookmarksViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -13,6 +13,7 @@ router.register('contact-us', ContactUsViewSet, basename="Contact Us Queries")
 # router.register('cards/',CardsView)
 router.register('cards-solutions', CardsSolutionsView, basename="Cards Solutions")
 router.register('notes', NotesViewSet, basename="Notes")
+router.register('bookmarks', BookmarksViewSet, basename="Bookmarks")
 
 auth_view_urls = [
 	path('reset_password/', RequestResetPasswordView.as_view(), name="reset_password"),
