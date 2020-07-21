@@ -40,6 +40,8 @@ def registration_view(request):
             data['avatar'] = account.avatar
             token = Token.objects.get(user=account).key
             data['token'] = token
+            data['page_offset'] = account.page_offset
+            data['question_offset'] = account.question_offset
         else:
             try :
                 email_error = serializer.errors['email'][0]
@@ -72,7 +74,9 @@ def Login(request):
         'email': logged_in_user.get('email'),
         'username': logged_in_user.get('username'),
         'avatar': logged_in_user.get('avatar'),
-        'token': token.key
+        'token': token.key,
+        'page_offset': logged_in_user.get('page_offset'),
+        'question_offset': logged_in_user.get('question_offset')
     }, status=status.HTTP_202_ACCEPTED)
 
 @api_view(['PUT'])
@@ -99,7 +103,13 @@ def Update_Account(request) :
     
     elif 'avatar' in request.data.keys() :
         account.avatar = request.data.get('avatar')
+        
+    elif 'page_offset' in request.data.keys() :
+        account.page_offset = request.data.get('page_offset')
 
+    elif 'question_offset' in request.data.keys() :
+        account.question_offset = request.data.get('question_offset')
+    
     else :
         return Response({'error_message': "Please provide at least one field to update"}, status = status.HTTP_400_BAD_REQUEST)
 

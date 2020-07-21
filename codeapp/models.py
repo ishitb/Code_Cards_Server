@@ -51,6 +51,8 @@ class Account(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    page_offset = models.IntegerField(default=1)
+    question_offset = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -66,6 +68,12 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
+    def getPageOffset(self):
+        return self.page_offset
+    
+    def getQuestionOffset(self):
+        return self.question_offset
+        
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

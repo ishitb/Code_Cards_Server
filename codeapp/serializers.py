@@ -16,7 +16,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['email', 'username', 'password', 'password2', 'avatar']
+        fields = ['email', 'username', 'password', 'password2', 'avatar','page_offset','question_offset']
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -26,7 +26,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account = Account(
             email=self.validated_data['email'],
             username=self.validated_data['username'],
-            avatar = self.validated_data['avatar']
+            avatar = self.validated_data['avatar'],
+            page_offset = self.validated_data['page_offset'],
+            question_offset = self.validated_data['question_offset']
         )
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
