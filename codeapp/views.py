@@ -79,6 +79,21 @@ def Login(request):
         'question_offset': logged_in_user.get('question_offset')
     }, status=status.HTTP_202_ACCEPTED)
 
+@api_view(['POST'])
+@permission_classes((AllowAny, ))
+def Get_Page(request) :
+
+    try :
+        account = Token.objects.get(key = request.data.get('token')).user
+    except :
+        return Response({'error_message': "Account doesn't exist. Please try again!"}, status = status.HTTP_401_UNAUTHORIZED)
+
+    return Response({
+        'page_offset': account.page_offset,
+        'question_offset': account.question_offset
+    }, status=status.HTTP_202_ACCEPTED)
+
+
 @api_view(['PUT'])
 @permission_classes((AllowAny, ))
 def Update_Account(request) :
@@ -103,7 +118,11 @@ def Update_Account(request) :
     
     elif 'avatar' in request.data.keys() :
         account.avatar = request.data.get('avatar')
-        
+    
+    elif 'page_offset' in request.data.keys() and 'question_offset' in request.data.keys():
+        account.page_offset = request.data.get('page_offset')
+        account.question_offset = request.data.get('question_offset')
+
     elif 'page_offset' in request.data.keys() :
         account.page_offset = request.data.get('page_offset')
 
