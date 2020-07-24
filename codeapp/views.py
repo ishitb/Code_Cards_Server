@@ -3,10 +3,10 @@ from rest_framework import status, generics, viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
-from .serializers import RegistrationSerializer, OAuthAccountSerializer, RequestResetPasswordSerializer, ContactUsSerializer, CardsSerializer, CardsSolutionsSerializer, NoteSerializer
+from .serializers import RegistrationSerializer, OAuthAccountSerializer, RequestResetPasswordSerializer, ContactUsSerializer, CardsSerializer, CardsSolutionsSerializer, NoteSerializer, BookmarkSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate
-from .models import Account, OAuthAccount, ContactUsModel, Cards, CardsSolutions, Notes
+from .models import Account, OAuthAccount, ContactUsModel, Cards, CardsSolutions, Notes, Bookmarks
 from django.http import HttpResponse, JsonResponse
 from .utils.mails import send
 from .secret import *
@@ -40,6 +40,8 @@ def registration_view(request):
             data['avatar'] = account.avatar
             token = Token.objects.get(user=account).key
             data['token'] = token
+            data['page_offset'] = account.page_offset
+            data['question_offset'] = account.question_offset
         else:
             try :
                 email_error = serializer.errors['email'][0]
@@ -72,7 +74,9 @@ def Login(request):
         'email': logged_in_user.get('email'),
         'username': logged_in_user.get('username'),
         'avatar': logged_in_user.get('avatar'),
-        'token': token.key
+        'token': token.key,
+        'page_offset': logged_in_user.get('page_offset'),
+        'question_offset': logged_in_user.get('question_offset')
     }, status=status.HTTP_202_ACCEPTED)
 
 @api_view(['PUT'])
@@ -99,7 +103,13 @@ def Update_Account(request) :
     
     elif 'avatar' in request.data.keys() :
         account.avatar = request.data.get('avatar')
+        
+    elif 'page_offset' in request.data.keys() :
+        account.page_offset = request.data.get('page_offset')
 
+    elif 'question_offset' in request.data.keys() :
+        account.question_offset = request.data.get('question_offset')
+    
     else :
         return Response({'error_message': "Please provide at least one field to update"}, status = status.HTTP_400_BAD_REQUEST)
 
@@ -268,3 +278,44 @@ class NotesViewSet(viewsets.ViewSet) :
         
         except :
             return Response({'error_message': "Internal Server Error. Please try again later."}, status = status.HTTP_400_BAD_REQUEST)
+
+class BookmarksViewSet(viewsets.ViewSet) :
+
+    def get_serializer_errors(self, errors) :
+        try :
+            user_error = errors['user'][0]
+            user_error = "User doesn't exist!"
+        except :
+            user_error = None
+        
+        try :
+            bookmark_error = errors['bookmark'][0]
+        except :
+            bookmark_error = None
+            
+        error_message = user_error if user_error is not None else "" + bookmark_error if bookmark_error is not None else ""     
+        
+        return error_message
+
+    def create(self, request) :
+        serializer = BookmarkSerializer(data = request.data)
+        if serializer.is_valid() :
+            serializer.save()
+            
+            return Response({'message': "Bookmark succesfully saved!"}, status = status.HTTP_201_CREATED)
+        
+        else :
+            return Response({'error_message': self.get_serializer_errors(serializer.errors)}, status = status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request) :
+        bookmark = Bookmarks.objects.filter(user = request.data.get('user')) if request.data.get('user') is not None else Bookmarks.objects.all()
+        serializer = BookmarkSerializer(bookmark, many=True)
+
+        return Response(serializer.data)
+
+    def delete(self, request) :
+        queryset = Bookmarks.objects.all()
+        bookmarks = get_object_or_404(queryset, pk = request.data.get('id'))
+
+        bookmarks.delete()
+        return Response({'message': "Bookmark Successfully deleted!"}, status = status.HTTP_200_OK)
