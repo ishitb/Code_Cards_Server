@@ -311,13 +311,21 @@ class BookmarksViewSet(viewsets.ViewSet) :
             bookmark_error = errors['bookmark'][0]
         except :
             bookmark_error = None
-            
+        
         error_message = user_error if user_error is not None else "" + bookmark_error if bookmark_error is not None else ""     
         
         return error_message
 
     def create(self, request) :
-        serializer = BookmarkSerializer(data = request.data)
+        data = dict()
+        data['bookmark'] = int(request.data.get('cardID'))
+
+        try :
+            data['user'] = Token.objects.get(key = request.data.get('userToken')).user.id
+        except:
+            return Response({'error_message': "Account doesn't exist. Please try again!"}, status = status.HTTP_401_UNAUTHORIZED)
+
+        serializer = BookmarkSerializer(data = data)
         if serializer.is_valid() :
             serializer.save()
             
@@ -327,10 +335,21 @@ class BookmarksViewSet(viewsets.ViewSet) :
             return Response({'error_message': self.get_serializer_errors(serializer.errors)}, status = status.HTTP_400_BAD_REQUEST)
 
     def list(self, request) :
-        bookmark = Bookmarks.objects.filter(user = request.data.get('user')) if request.data.get('user') is not None else Bookmarks.objects.all()
+        try :
+            user = Token.objects.get(key = request.headers.get('Token')).user.id
+        except Exception as e:
+            print(e)
+            return Response({'error_message': "Account doesn't exist. Please try again!"}, status = status.HTTP_401_UNAUTHORIZED)
+            
+        bookmark = Bookmarks.objects.filter(user = user) 
         serializer = BookmarkSerializer(bookmark, many=True)
 
-        return Response(serializer.data)
+        bookmarked_questions = []
+
+        for sd in serializer.data :
+            bookmarked_questions.append(Cards.objects.filter(id = sd['bookmark']).values().first())
+
+        return Response(bookmarked_questions)
 
     def delete(self, request) :
         queryset = Bookmarks.objects.all()

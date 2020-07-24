@@ -159,8 +159,8 @@ class Notes(models.Model) :
         return str(self.title)
 
 class Bookmarks(models.Model):
-    bookmark = models.ForeignKey(Cards,on_delete=models.CASCADE)
-    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    bookmark = models.ForeignKey(Cards, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.bookmark)

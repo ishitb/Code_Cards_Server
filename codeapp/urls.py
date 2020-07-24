@@ -18,7 +18,7 @@ router.register('bookmarks', BookmarksViewSet, basename="Bookmarks")
 auth_view_urls = [
 	path('reset_password/', RequestResetPasswordView.as_view(), name="reset_password"),
 	path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
-	path('reset/(?P<uidb65>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,23})/', auth_views.PasswordResetConfirmView.as_view(), name="password_rest_confirm"),
+	path('reset/(?P<uidb65>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,23})/', auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
 	path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
 ]
 
