@@ -4,7 +4,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.utils import timezone
+from datetime import datetime
 from rest_framework.authtoken.models import Token
 
 import uuid
@@ -13,12 +14,9 @@ class MyAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('Users must have an email address')
-        # if not username:
-        #     raise ValueError('Users must have a username')
 
         user = self.model(
             email=self.normalize_email(email),
-            # username=username,
             **extra_fields
         )
 
@@ -140,7 +138,6 @@ class Cards(models.Model):
         return self.hint
 
 class CardsSolutions(models.Model):
-    # solution = models.CharField(max_length = 3000,null=False)
     solution = models.TextField()
     timeComplexity = models.CharField(max_length = 30,null = True)
     card = models.ForeignKey(Cards,on_delete = models.CASCADE)
@@ -151,8 +148,12 @@ class CardsSolutions(models.Model):
         return self.timeComplexity
 
 class Notes(models.Model) :
+    noteId = models.CharField(max_length=50,primary_key=True)
     title = models.CharField(max_length = 50)
     description = models.TextField()
+    starred = models.BooleanField(default=False)
+    createdDateTime = models.DateTimeField(default=datetime.now,null=True)
+    updatedDateTime = models.DateTimeField(default=datetime.now)
     user = models.ForeignKey(Account, on_delete = models.CASCADE)
 
     def __str__(self):

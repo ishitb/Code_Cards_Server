@@ -93,18 +93,9 @@ class CardsSolutionsSerializer(serializers.ModelSerializer):
         fields = ['solution', 'timeComplexity']
 
 class CardsSerializer(serializers.ModelSerializer):
-    # solutions = CardsSolutionsSerializer(read_only=True, many=True)
-    
     class Meta:
         model = Cards
-        fields = ['question', 'hint', 'company', 'tags', 'id']
-
-    # def create(self, validated_data):
-    #     solutions_data = validated_data.pop('solutions')
-    #     cards = Cards.objects.create(**validated_data)
-    #     for solutions_data in solutions_data:
-    #         CardsSolutions.objects.create(question=cards, **solutions_data)
-    #     return cards
+        fields = '__all__'
 
 class NoteSerializer(serializers.ModelSerializer) :
     class Meta :

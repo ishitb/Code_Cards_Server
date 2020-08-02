@@ -9,7 +9,7 @@ class CustomContactUsAdmin(admin.ModelAdmin) :
     list_display = ['email', 'name', 'id', 'date_posted', 'responded']
 
 class CustomNotesAdmin(admin.ModelAdmin) :
-    list_display = ['title', 'id', 'user']
+    list_display = ['title', 'noteId', 'user']
 
 class CustomBookmaksAdmin(admin.ModelAdmin):
     list_display = ['bookmark','user']

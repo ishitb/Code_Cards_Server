@@ -262,35 +262,55 @@ class NotesViewSet(viewsets.ViewSet) :
         return error_message
 
     def create(self, request) :
-        serializer = NoteSerializer(data = request.data)
+        data = dict()
+        try :
+            data['user'] = Token.objects.get(key = request.data.get('userToken')).user.id
+        except:
+            return Response({'error_message': "Account doesn't exist. Please try again!"}, status = status.HTTP_401_UNAUTHORIZED)
+        data['title']=request.data.get('title')
+        data['description']=request.data.get('description')
+        data['starred']=request.data.get('starred')
+        data['createdDateTime']=request.data.get('createdDateTime')
+        data['updatedDateTime']=request.data.get('updatedDateTime')
+        data['noteId'] = request.data.get('noteId')
+
+        serializer = NoteSerializer(data = data)
         if serializer.is_valid() :
             serializer.save()
             
-            return Response({'message': "Notes succesfully saved!"}, status = status.HTTP_201_CREATED)
+            return Response({'message': 'Note has been Successfully saved!'}, status = status.HTTP_201_CREATED)
         
         else :
             return Response({'error_message': self.get_serializer_errors(serializer.errors)}, status = status.HTTP_400_BAD_REQUEST)
 
     def list(self, request) :
-        note = Notes.objects.filter(user = request.data.get('user')) if request.data.get('user') is not None else Notes.objects.all()
+        try :
+            user = Token.objects.get(key = request.headers.get('userToken')).user.id
+        except Exception as e:
+            print(e)
+            return Response({'error_message': "Account doesn't exist. Please try again!"}, status = status.HTTP_401_UNAUTHORIZED)
+        
+        note = Notes.objects.filter(user =user)
         serializer = NoteSerializer(note, many=True)
 
         return Response(serializer.data)
 
     def delete(self, request) :
         queryset = Notes.objects.all()
-        note = get_object_or_404(queryset, pk = request.data.get('id'))
+        note = get_object_or_404(queryset, pk = request.headers.get('noteId'))
 
         note.delete()
         return Response({'message': "Note Successfully deleted!"}, status = status.HTTP_200_OK)
 
     def put(self, request) :
         queryset = Notes.objects.all()
-        note = get_object_or_404(queryset, pk = request.data.get('id'))
-
+        note = get_object_or_404(queryset, pk = request.data.get('noteId'))
+        
         note.title = request.data.get('title') if request.data.get('title') is not None else note.title
+        note.starred = request.data.get('starred') if request.data.get('starred') is not None else note.starred
+        note.updatedDateTime = request.data.get('updatedDateTime') if request.data.get('updatedDateTime') is not None else note.updatedDateTime
         note.description = request.data.get('description') if request.data.get('description') is not None else note.description
-
+        
         try :
             note.save()
             return Response({'message': "Note successfully updated!"}, status = status.HTTP_201_CREATED)
