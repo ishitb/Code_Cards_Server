@@ -367,13 +367,15 @@ class BookmarksViewSet(viewsets.ViewSet) :
         bookmarked_questions = []
 
         for sd in serializer.data :
-            bookmarked_questions.append(Cards.objects.filter(id = sd['bookmark']).values().first())
+            bookmark_data = Cards.objects.filter(id = sd['bookmark']).values().first()
+            bookmark_data['bookmark_id'] = sd['id']
+            bookmarked_questions.append(bookmark_data)
 
         return Response(bookmarked_questions)
 
     def delete(self, request) :
         queryset = Bookmarks.objects.all()
-        bookmarks = get_object_or_404(queryset, pk = request.data.get('id'))
+        bookmarks = get_object_or_404(queryset, pk = int(request.headers.get('Id')))
 
         bookmarks.delete()
         return Response({'message': "Bookmark Successfully deleted!"}, status = status.HTTP_200_OK)

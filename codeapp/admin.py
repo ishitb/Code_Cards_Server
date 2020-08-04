@@ -12,7 +12,7 @@ class CustomNotesAdmin(admin.ModelAdmin) :
     list_display = ['title', 'noteId', 'user']
 
 class CustomBookmaksAdmin(admin.ModelAdmin):
-    list_display = ['bookmark','user']
+    list_display = ['bookmark','user', 'id']
 
 admin.site.register(Account, CustomAccountAdmin)
 admin.site.register(ContactUsModel, CustomContactUsAdmin)
