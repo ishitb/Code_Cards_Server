@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Montserrat&display=swap");
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    --grey: #1c2029;
+    --bluegrey: #38445c;
+    --green: #79bd4b;
+    --bright-green: #49bd6b;
+    --red: #f95a5f;
+    color: whitesmoke;
+    font-family: "Montserrat", sans-serif;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--grey);
+}
+
+#password_reset_confirm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+}
+
+#password_reset_confirm h3, #password_reset_complete h3 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--green);
+    font-family: "Nunito", sans-serif;
+}
+
+#password_reset_confirm p {
+    font-size: 1.25rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+#password_reset_confirm form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#password_reset_confirm form label,
+br {
+    display: none;
+}
+
+#password_reset_confirm form input {
+    border: none;
+    height: 3rem;
+    width: 20rem;
+    border-radius: 5px;
+    background-color: var(--bluegrey);
+    font-size: 1.25rem;
+    padding-left: 1rem;
+    margin: 0.5rem 0;
+}
+
+#password_reset_confirm form input:focus,
+#password_reset_confirm form input::selection {
+    border: none;
+}
+
+#password_reset_confirm form input[type="Submit"] {
+    background-color: var(--green);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.7s;
+}
+
+#password_reset_confirm form input[type="Submit"]:hover {
+    background-color: var(--bright-green);
+}
+
+.helptext {
+    display: none;
+}
+
+.errorlist {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    list-style: none;
+    padding: 1.5rem;
+    text-align: center;
+    border-radius: 15px;
+    background-color: var(--red);
+    animation: error 5s ease-out 1s;
+}
+
+@keyframes error {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
