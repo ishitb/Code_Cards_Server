@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import registration_view, Login, OAuthLogin, OAuthLogin_detail, RequestResetPasswordView, ContactUsViewSet, Update_Account, CardsListView, CardsSolutionsView, CardsView, NotesViewSet, BookmarksViewSet,Get_Page
+from .views import registration_view, Login, RequestResetPasswordView, ContactUsViewSet, Update_Account, CardsListView, CardsSolutionsView, CardsView, NotesViewSet, BookmarksViewSet,Get_Page, ListContestsView
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -24,11 +24,12 @@ auth_view_urls = [
 
 urlpatterns = [
 	path('register', registration_view, name='register'),
+	path('contestAPI',ListContestsView.as_view(),name = 'contests'),
 	path('login', Login, name='login'),
 	path('update-account/', Update_Account, name="Update Account"),
 	path('get-page/', Get_Page, name="Page Details"),
-	path('oauthLogin', OAuthLogin, name='oauthLogin'),
-	path('oauthLoginDetail/<int:pk>/', OAuthLogin_detail, name='oauthLoginDetail'),
+	# path('oauthLogin', OAuthLogin, name='oauthLogin'),
+	# path('oauthLoginDetail/<int:pk>/', OAuthLogin_detail, name='oauthLoginDetail'),
 	path('cards', CardsView, name='cards'),
 	path('cards/list', CardsListView.as_view(), name='cardsList'),
 	# path('cards/solutions', CardsSolutionsView, name='cardsSolutions'),

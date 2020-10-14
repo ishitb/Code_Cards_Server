@@ -39,11 +39,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account.save()
         return account
 
-class OAuthAccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OAuthAccount
-        fields = ['id','email', 'username', 'avatar',
-                  'date_joined', 'oauthType', 'token', 'is_admin']
+# class OAuthAccountSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = OAuthAccount
+#         fields = ['id','email', 'username', 'avatar',
+#                   'date_joined', 'oauthType', 'token', 'is_admin']
 
 class ContactUsSerializer(serializers.ModelSerializer) :
     class Meta :
@@ -105,4 +105,10 @@ class NoteSerializer(serializers.ModelSerializer) :
 class BookmarkSerializer(serializers.ModelSerializer) :
     class Meta :
         model = Bookmarks
+        fields = '__all__'
+
+
+class ContestSerializer(serializers.ModelSerializer) :
+    class Meta :
+        model = Contests
         fields = '__all__'

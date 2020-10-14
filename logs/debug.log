@@ -1,0 +1,45 @@
+INFO basehttp "GET /contestAPI HTTP/1.1" 200 13334
+INFO basehttp "GET /static/rest_framework/js/jquery-3.4.1.min.js HTTP/1.1" 304 0
+INFO basehttp "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 304 0
+INFO basehttp "GET /static/rest_framework/js/csrf.js HTTP/1.1" 304 0
+INFO basehttp "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 304 0
+INFO basehttp "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 304 0
+INFO basehttp "GET /static/rest_framework/js/default.js HTTP/1.1" 304 0
+WARNING log Not Found: /img/grid.png
+WARNING basehttp "GET /img/grid.png HTTP/1.1" 404 7729
+WARNING log Not Found: /favicon.ico
+INFO basehttp "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO basehttp "GET /contestAPI?page=2 HTTP/1.1" 200 13454
+WARNING log Not Found: /img/grid.png
+WARNING basehttp "GET /img/grid.png HTTP/1.1" 404 7729
+WARNING log Not Found: /favicon.ico
+INFO basehttp "GET /contestAPI HTTP/1.1" 200 13334
+WARNING log Not Found: /img/grid.png
+WARNING basehttp "GET /img/grid.png HTTP/1.1" 404 7729
+WARNING log Not Found: /favicon.ico
+INFO autoreload Watching for file changes with StatReloader
+INFO basehttp "GET / HTTP/1.1" 200 5749
+WARNING log Not Found: /img/grid.png
+WARNING basehttp "GET /img/grid.png HTTP/1.1" 404 7729
+INFO basehttp "GET /admin/ HTTP/1.1" 200 9345
+INFO basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+WARNING log Not Found: /img/icon-addlink.svg
+WARNING log Not Found: /img/icon-changelink.svg
+WARNING basehttp "GET /img/icon-addlink.svg HTTP/1.1" 404 7753
+WARNING basehttp "GET /img/icon-changelink.svg HTTP/1.1" 404 7762
+WARNING log Not Found: /img/icon-deletelink.svg
+WARNING basehttp "GET /img/icon-deletelink.svg HTTP/1.1" 404 7762
+INFO basehttp "GET /admin/codeapp/contests/ HTTP/1.1" 200 38183
+INFO basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3223
+WARNING log Not Found: /admin/codeapp/img/tooltag-add.svg
+WARNING basehttp "GET /admin/codeapp/img/tooltag-add.svg HTTP/1.1" 404 10744
+WARNING log Not Found: /favicon.ico
+INFO basehttp "POST /admin/codeapp/contests/ HTTP/1.1" 200 12026
+INFO basehttp "POST /admin/codeapp/contests/ HTTP/1.1" 302 0
+INFO basehttp "GET /admin/codeapp/contests/ HTTP/1.1" 200 3333
+INFO basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3223
+WARNING log Not Found: /admin/codeapp/img/icon-yes.svg
+WARNING log Not Found: /admin/codeapp/img/tooltag-add.svg
+WARNING basehttp "GET /admin/codeapp/img/icon-yes.svg HTTP/1.1" 404 10735
+WARNING basehttp "GET /admin/codeapp/img/tooltag-add.svg HTTP/1.1" 404 10744
+WARNING log Not Found: /favicon.ico

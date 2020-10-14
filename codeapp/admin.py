@@ -14,9 +14,13 @@ class CustomNotesAdmin(admin.ModelAdmin) :
 class CustomBookmaksAdmin(admin.ModelAdmin):
     list_display = ['bookmark','user', 'id']
 
+class CustomContestAdmin(admin.ModelAdmin):
+    list_display = ['duration','end','event','href','name','icon','start']
+
 admin.site.register(Account, CustomAccountAdmin)
 admin.site.register(ContactUsModel, CustomContactUsAdmin)
 admin.site.register(Cards)
 admin.site.register(CardsSolutions)
 admin.site.register(Notes, CustomNotesAdmin)
 admin.site.register(Bookmarks, CustomBookmaksAdmin)
+admin.site.register(Contests,CustomContestAdmin)

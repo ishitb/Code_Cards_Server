@@ -152,3 +152,29 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'codeapp/media/')
 CONTACT_US_MEDIA_ROOT = os.path.join(BASE_DIR, 'codeapp/media/contact_us_screenshots/')
 CONTACT_US_MEDIA_URL = '/media/contact_us_screenshots/'
 MEDIA_URL = '/media/'
+
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './logs/debug.log',
+            'formatter':'simpleRE',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+    'formatters':{
+        'simpleRE':{
+            'format': '{levelname} {module} {message}',
+            'style':'{',
+        }
+    },
+}

@@ -3,10 +3,10 @@ from rest_framework import status, generics, viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
-from .serializers import RegistrationSerializer, OAuthAccountSerializer, RequestResetPasswordSerializer, ContactUsSerializer, CardsSerializer, CardsSolutionsSerializer, NoteSerializer, BookmarkSerializer
+from .serializers import RegistrationSerializer, RequestResetPasswordSerializer, ContactUsSerializer, CardsSerializer, CardsSolutionsSerializer, NoteSerializer, BookmarkSerializer, ContestSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate
-from .models import Account, OAuthAccount, ContactUsModel, Cards, CardsSolutions, Notes, Bookmarks
+from .models import Account, ContactUsModel, Cards, CardsSolutions, Notes, Bookmarks, Contests
 from django.http import HttpResponse, JsonResponse
 from .utils.mails import send
 from .secret import *
@@ -15,6 +15,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
+from rest_framework import generics
 
 # PASSWORD RESET VIEW
 class RequestResetPasswordView(generics.GenericAPIView) :
@@ -136,43 +137,43 @@ def Update_Account(request) :
 
     return Response({'message': "Account updated successfully"}, status = status.HTTP_202_ACCEPTED)
 
-@api_view(['POST', 'GET', ])
-def OAuthLogin(request):
+# @api_view(['POST', 'GET', ])
+# def OAuthLogin(request):
 
-    if request.method == 'GET':
-        oauth_login = OAuthAccount.objects.all()
-        serializer = OAuthAccountSerializer(oauth_login, many=True)
-        return Response(serializer.data)
+#     if request.method == 'GET':
+#         oauth_login = OAuthAccount.objects.all()
+#         serializer = OAuthAccountSerializer(oauth_login, many=True)
+#         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = OAuthAccountSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'POST':
+#         serializer = OAuthAccountSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['PUT', 'GET', ])
-def OAuthLogin_detail(request, pk):
+# @api_view(['PUT', 'GET', ])
+# def OAuthLogin_detail(request, pk):
 
-    try:
-        oauth_login = OAuthAccount.objects.get(pk=pk)
-    except OAuthAccount.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+#     try:
+#         oauth_login = OAuthAccount.objects.get(pk=pk)
+#     except OAuthAccount.DoesNotExist:
+#         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
-        serializer = OAuthAccountSerializer(oauth_login)
-        return Response(serializer.data)
+#     if request.method == 'GET':
+#         serializer = OAuthAccountSerializer(oauth_login)
+#         return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        serializer = OAuthAccountSerializer(oauth_login, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'PUT':
+#         serializer = OAuthAccountSerializer(oauth_login, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
-        oauth_login.delete()
-        return Response(status=status.HTTP_204_NO_CONNECT)
+#     elif request.method == 'DELETE':
+#         oauth_login.delete()
+#         return Response(status=status.HTTP_204_NO_CONNECT)
 
 # class ContactUsViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin) :
 #     serializer_class = ContactUsSerializer
@@ -214,10 +215,6 @@ def CardsView(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# class CardsView(viewsets.ViewSet):
-#     serializer_class = CardsSerializer
-#     queryset = Cards.objects.all()
-
 
 class CardsSolutionsView(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin) :
     queryset = CardsSolutions.objects.all()
@@ -228,15 +225,6 @@ class CardsListView(ListAPIView):
     queryset = Cards.objects.all()
     serializer_class = CardsSerializer
     pagination_class = PageNumberPagination
-
-# Problem 
-# class CardsSolutionsListView(generics.ListCreateAPIView):
-#     queryset = CardsSolutions.objects.all()
-#     serializer_class = CardsSolutionsSerializer
-
-# class CardsSolutionsView(generics.RetrieveUpdateDestroyAPIView):
-#     serializer_class = CardsSolutionsSerializer
-#     queryset = CardsSolutions.objects.all()
 
 class NotesViewSet(viewsets.ViewSet) :
 
@@ -379,3 +367,8 @@ class BookmarksViewSet(viewsets.ViewSet) :
 
         bookmarks.delete()
         return Response({'message': "Bookmark Successfully deleted!"}, status = status.HTTP_200_OK)
+
+
+class ListContestsView(generics.ListAPIView) :
+    queryset = Contests.objects.all()
+    serializer_class = ContestSerializer

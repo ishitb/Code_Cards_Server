@@ -79,21 +79,21 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
-class OAuthAccount(models.Model):
-    email = models.EmailField(max_length = 60,verbose_name = "email",null=False,blank=False)
-    username = models.CharField(max_length = 30,null=False,blank=False)
-    avatar = models.CharField(max_length = 50,null=True)
-    date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
-    oauthType = models.CharField(max_length = 20,null=False,blank=False)
-    token = models.CharField(max_length = 50,null=False,blank=False)
-    is_admin = models.BooleanField(default=False)
+# class OAuthAccount(models.Model):
+#     email = models.EmailField(max_length = 60,verbose_name = "email",null=False,blank=False)
+#     username = models.CharField(max_length = 30,null=False,blank=False)
+#     avatar = models.CharField(max_length = 50,null=True)
+#     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
+#     oauthType = models.CharField(max_length = 20,null=False,blank=False)
+#     token = models.CharField(max_length = 50,null=False,blank=False)
+#     is_admin = models.BooleanField(default=False)
     
-    def __str__(self):
-        return self.email
-    def getToken(self):
-        return self.token
-    def getUsername(self):
-        return self.username
+#     def __str__(self):
+#         return self.email
+#     def getToken(self):
+#         return self.token
+#     def getUsername(self):
+#         return self.username
 
 # TO SET CUSTOM FILE UPLOAD NAME
 def path_and_rename(instance, filename) :
@@ -165,3 +165,13 @@ class Bookmarks(models.Model):
 
     def __str__(self):
         return str(self.bookmark)
+
+
+class Contests(models.Model):
+    duration = models.IntegerField() 
+    end = models.DateTimeField()
+    event = models.CharField(max_length=250)
+    href = models.CharField(max_length=250)
+    icon = models.TextField()
+    name = models.CharField(max_length=50)
+    start = models.DateTimeField()
