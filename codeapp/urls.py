@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 app_name = 'codeapp'
 
 from django.contrib.auth import views as auth_views
+from .forms.password_reset_confirm import SetPasswordForm
 
 # BY REST_FRAMEWORK
 router = DefaultRouter()
@@ -18,8 +19,21 @@ router.register('bookmarks', BookmarksViewSet, basename="Bookmarks")
 auth_view_urls = [
 	path('reset_password/', RequestResetPasswordView.as_view(), name="reset_password"),
 	path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
-	path('reset/(?P<uidb65>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,23})/', auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
-	path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
+	path(
+		'reset/<uidb64>/<token>/',
+     	auth_views.PasswordResetConfirmView.as_view(
+			template_name="codeapp/password_reset_confirm.html",
+			form_class=SetPasswordForm
+		), 
+     	name="password_reset_confirm"
+	),
+	path(
+		'reset_password_complete/', 
+        auth_views.PasswordResetCompleteView.as_view(
+			template_name="codeapp/password_reset_complete.html"
+		), 
+        name="password_reset_complete"
+	),
 ]
 
 urlpatterns = [
